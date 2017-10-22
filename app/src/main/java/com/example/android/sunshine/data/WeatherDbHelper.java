@@ -30,7 +30,9 @@ public class WeatherDbHelper extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "weather.db";
     //  TODO (13) Create a private static final int called DATABASE_VERSION and set it to 1
-    public static final int DATABASE_VERSION = 2;
+    //  TODO (22) Increment the database version after changing the create table statement
+
+    public static final int DATABASE_VERSION = 3;
 //  TODO (14) Create a constructor that accepts a context and call through to the superclass constructor
 
     public WeatherDbHelper(Context context) {
@@ -50,8 +52,17 @@ public class WeatherDbHelper extends SQLiteOpenHelper{
              WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, "                 +
              WeatherEntry.COLUMN_PRESSURE + " REAL NOT NULL, "                 +
              WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL,"                +
-             WeatherEntry.COLUMN_DEGREES     + " REAL NOT NULL"                + ");";
-        db.execSQL(SQL_CREATE_TABLE_WEATHER);
+             WeatherEntry.COLUMN_DEGREES     + " REAL NOT NULL"                +
+
+        //              TODO (21) Add a UNIQUE constraint on the date column to replace on conflict
+          /*
+                 * To ensure this table can only contain one weather entry per date, we declare
+                 * the date column to be unique. We also specify "ON CONFLICT REPLACE". This tells
+                 * SQLite that if we have a weather entry for a certain date and we attempt to
+                 * insert another weather entry with that date, we replace the old weather entry.
+                 */
+          "UNIQUE (" + WeatherEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
+
 
     }
 //  TODO (16) Override onUpgrade, but don't do anything within it yet
